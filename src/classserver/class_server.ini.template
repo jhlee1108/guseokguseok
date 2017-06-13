@@ -1,0 +1,18 @@
+[server]
+user_db = class_user.sqlite
+port = 6292
+
+[log]
+# Level    Numeric value
+# CRITICAL       50
+# ERROR          40
+# WARNING        30
+# INFO           20
+# DEBUG          10
+# NOTSET          0
+level = DEBUG
+file = ./server.log
+
+[handle]
+scan_db = class_scan.sqlite
+
