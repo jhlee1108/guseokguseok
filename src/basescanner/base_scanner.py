@@ -62,6 +62,9 @@ class BaseScanner(object):
         # http://www.radiotap.org/
         radiotab = struct.unpack('!1s1s2s4s', data_cursor[0:8])
         radiotab_length = int.from_bytes(radiotab[2], byteorder='little')
+        # ssi_signal 계산
+        ssi_signal = data_cursor[22]
+        ssi_signal = ssi_signal - 256 if ssi_signal > 127 else ssi_signal
         # 데이터 커서 이동
         data_cursor = data_cursor[radiotab_length:]
         if len(data_cursor) < 22:
@@ -73,6 +76,9 @@ class BaseScanner(object):
         if subtype[0] != '4': # 4: Probe Request
             return None
         source_mac_address = frame80211[3].hex()
+        print('%d dBm' % ssi_signal)
+        print('Subtype: ' + subtype)
+        print('Source address: ' + source_mac_address)
         # MAC 주소 반환
         return source_mac_address
 
