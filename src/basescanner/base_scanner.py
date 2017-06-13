@@ -72,12 +72,14 @@ class BaseScanner(object):
         # 802.11 frame
         frame80211 = struct.unpack('!2s2s6s6s6s', data_cursor[0:22])
         # probe request
-        subtype = frame80211[0].hex()
-        if subtype[0] != '4': # 4: Probe Request
-            return None
+        frame_control_field = frame80211[0].hex()
+        subtype = frame_control_field[0]
+        frame_type = frame_control_field[1]
+        if subtype != '4' or frame_type != '0': # Type: Management frame(0)
+            return None                          # Subtype: 4
         source_mac_address = frame80211[3].hex()
-        print('%d dBm' % ssi_signal)
-        print('Subtype: ' + subtype)
+        print('SSI Signal: %d dBm' % ssi_signal)
+        print('Frame Control Field: ' + frame_control_field)
         print('Source address: ' + source_mac_address)
         # MAC 주소 반환
         return source_mac_address
