@@ -49,31 +49,29 @@ class ClassScanner(BaseScanner):
         hash_object.update(mac.upper().encode('utf-8'))
         hashed_mac = hash_object.hexdigest()
         # 시간 비교용 변수
-        now_handle = int(time.time())
+        #now_handle = int(time.time())
         # 저장 셋에 추가
-        self.mac_list.append([hashed_mac, mac[:6], ssi_signal])
+        #self.mac_list.append([hashed_mac, mac[:6], ssi_signal])
         # 일정 시간마다 저장
-        if (now_handle - self.last_handle) < self.interval:
-            return
+        #if (now_handle - self.last_handle) < self.interval:
+        #    return
         # 데이터 시리얼화
-        for row in self.mac_list:
-            send_data = {'device_id': self.device_id,
-                         'hashed_mac': row[0],
-                         'mac_vender': row[1],
-                         'ssi_signal': row[2]}
-            send_data = urllib.parse.urlencode(send_data) # URL 형태로 변환
-            send_data = send_data.encode('ascii') # bytes 로 변환
-            send_request = urllib.request.Request(self.server_url, 
-                                              data = send_data)
-            try:
-                with urllib.request.urlopen(send_request) as response:
-                    logging.debug('Send {0} MAC. Status: {1}'.format(
-                                  len(self.mac_list), response.status))
-            except Exception as err:
-                logging.error('MAC address send error: {0}'.format(err))
+        send_data = {'device_id': self.device_id,
+                     'hashed_mac': hashed_mac,
+                     'mac_vender': mac[:6],
+                     'ssi_signal': ssi_signal}
+        send_data = urllib.parse.urlencode(send_data) # URL 형태로 변환
+        send_data = send_data.encode('ascii') # bytes 로 변환
+        send_request = urllib.request.Request(self.server_url, 
+                                          data = send_data)
+        try:
+            with urllib.request.urlopen(send_request) as response:
+                logging.debug('Send {0} MAC. Status: {1}'.format(
+                              hashed_mac, response.status))
+        except Exception as err:
+            logging.error('MAC address send error: {0}'.format(err))
         # 다음 저장 시간 세팅 및 변수 클리어
-        self.last_handle = now_handle
-        self.mac_list.clear()
+        #self.last_handle = now_handle
 
 
 def main():
