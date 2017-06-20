@@ -43,14 +43,18 @@ class ClassScannerServerHandler(CGIHTTPRequestHandler):
             # 저장할 데이터 준비
             unix_time = int(time.time())
             device_id = data['device_id'][0]
-            log_set = data['log_set'][0]
+            hashed_mac = data['hashed_mac'][0]
+            mac_vender = data['mac_vender'][0]
+            ssi_signal = data['ssi_signal'][0]
             # 데이터베이스 커밋
             self.cursor.execute('''
                     INSERT OR IGNORE INTO scan
-                    (unix_time, device_id, log_set) VALUES ('''
+                    (unix_time, device_id, hashed_mac, mac_vender, ssi_signal) VALUES ('''
                     + str(unix_time) + ', '
-                    + '"' + device_id + '", '
-                    + '"' + log_set + '")')
+                    + '"' + str(device_id) + '", '
+                    + '"' + str(hashed_mac) + '", '
+                    + '"' + str(mac_vender) + '", '
+                    + str(ssi_signal) + ')')
             self.connector.commit()
             # 성공 응답 전송
             self.send_response(202)
@@ -119,7 +123,9 @@ def main():
             ( log_number INTEGER PRIMARY KEY AUTOINCREMENT,
             unix_time INTEGER,
             device_id TEXT,
-            log_set TEXT );
+            hashed_mac TEXT,
+            mac_vender TEXT,
+            ssi_signal INTEGER );
             ''')
     connector.commit()
     cursor.close()

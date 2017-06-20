@@ -40,12 +40,12 @@ class BaseScanner(object):
             # https://en.wikipedia.org/wiki/Maximum_transmission_unit
             read_data = self.read_socket.recv(2324)
             # MAC 주소 파싱
-            read_mac = self._parse_data(read_data)
+            read_mac, read_ssi_signal = self._parse_data(read_data)
         except socket.timeout:
             logging.debug('Socket timeout')
-            return None
+            return None, None
         # MAC 주소 반환
-        return read_mac
+        return read_mac, read_ssi_signal
 
     # Probe Request의 MAC 주소 파싱
     def _parse_data(self, read_data):
@@ -53,11 +53,11 @@ class BaseScanner(object):
         if type(read_data) != bytes:
             logging.error('parse_data 에 주어진 read_data 가 bytes '
                           + '타입이 아닙니다.')
-            return None
+            return None, None
         # 데이터 커서 생성
         data_cursor = read_data
         if len(data_cursor) < 8:
-            return None
+            return None, None
         # radiotab header length
         # http://www.radiotap.org/
         radiotab = struct.unpack('!1s1s2s4s', data_cursor[0:8])
@@ -68,7 +68,7 @@ class BaseScanner(object):
         # 데이터 커서 이동
         data_cursor = data_cursor[radiotab_length:]
         if len(data_cursor) < 22:
-            return None
+            return None, None
         # 802.11 frame
         frame80211 = struct.unpack('!2s2s6s6s6s', data_cursor[0:22])
         # probe request
@@ -76,15 +76,15 @@ class BaseScanner(object):
         subtype = frame_control_field[0]
         frame_type = frame_control_field[1]
         if subtype != '4' or frame_type != '0': # Type: Management frame(0)
-            return None                          # Subtype: 4
+            return None, None                   # Subtype: 4
         source_mac_address = frame80211[3].hex()
         print('SSI Signal: %d dBm' % ssi_signal)
         print('Frame Control Field: ' + frame_control_field)
         print('Source address: ' + source_mac_address)
         # MAC 주소 반환
-        return source_mac_address
+        return source_mac_address, ssi_signal
 
-    def _handle_mac(self, mac):
+    def _handle_mac(self, mac, ssi_signal):
         # 맥 주소 핸들링
         # 각 기록기에서 새로 구현해야 함
         raise NotImplementedError
@@ -99,11 +99,11 @@ class BaseScanner(object):
             logging.info('중지하려면 Ctrl + C를 누르세요.')
             # 데이터 읽기
             while True:
-                mac = self._get_readed_mac()
+                mac, ssi_signal = self._get_readed_mac()
                 if mac == None: # MAC 주소가 안 읽힐 수 있음
                     continue
                 # 읽은 맥주소 다루기
-                self._handle_mac(mac)
+                self._handle_mac(mac, ssi_signal)
         except KeyboardInterrupt:
             logging.info('모니터링을 중지합니다.')
             sys.exit(0)
