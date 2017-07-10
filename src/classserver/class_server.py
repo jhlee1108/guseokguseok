@@ -9,7 +9,7 @@ import sqlite3
 import urllib.parse # urlunparse
 from http.server import HTTPServer
 from http.server import CGIHTTPRequestHandler
-import time
+import datetime
 
 
 INIFILE = 'class_server.ini'
@@ -41,19 +41,19 @@ class ClassScannerServerHandler(CGIHTTPRequestHandler):
             data = data.decode('utf-8')
             data = urllib.parse.parse_qs(data)
             # 저장할 데이터 준비
-            unix_time = int(time.time())
+            date_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             device_id = data['device_id'][0]
             hashed_mac = data['hashed_mac'][0]
-            mac_vender = data['mac_vender'][0]
+            mac_vendor = data['mac_vendor'][0]
             ssi_signal = data['ssi_signal'][0]
             # 데이터베이스 커밋
             self.cursor.execute('''
                     INSERT OR IGNORE INTO scan
-                    (unix_time, device_id, hashed_mac, mac_vender, ssi_signal) VALUES ('''
-                    + str(unix_time) + ', '
+                    (date_time, device_id, hashed_mac, mac_vendor, ssi_signal) VALUES ('''
+                    + str(date_time) + ', '
                     + '"' + str(device_id) + '", '
                     + '"' + str(hashed_mac) + '", '
-                    + '"' + str(mac_vender) + '", '
+                    + '"' + str(mac_vendor) + '", '
                     + str(ssi_signal) + ')')
             self.connector.commit()
             # 성공 응답 전송
@@ -121,10 +121,10 @@ def main():
     cursor.executescript('''
             CREATE TABLE IF NOT EXISTS scan
             ( log_number INTEGER PRIMARY KEY AUTOINCREMENT,
-            unix_time INTEGER,
+            date_time INTEGER,
             device_id TEXT,
             hashed_mac TEXT,
-            mac_vender TEXT,
+            mac_vendor TEXT,
             ssi_signal INTEGER );
             ''')
     connector.commit()

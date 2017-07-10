@@ -36,9 +36,9 @@ class ClassScanner(BaseScanner):
                              + 'device_id 항목이 필요합니다.')
             sys.exit(0)
         # 내부 변수 초기화
-        self.last_handle = int(time.time())
-        self.mac_list = list()
-        self.interval = int(self.config['handle']['interval'])
+        # self.last_handle = int(time.time())
+        # self.mac_list = list()
+        # self.interval = int(self.config['handle']['interval'])
         self.server_url = self.config['handle']['server_url']
         self.device_id = self.config['handle']['device_id']
         
@@ -58,7 +58,7 @@ class ClassScanner(BaseScanner):
         # 데이터 시리얼화
         send_data = {'device_id': self.device_id,
                      'hashed_mac': hashed_mac,
-                     'mac_vender': mac[:6],
+                     'mac_vendor': mac[:6],
                      'ssi_signal': ssi_signal}
         send_data = urllib.parse.urlencode(send_data) # URL 형태로 변환
         send_data = send_data.encode('ascii') # bytes 로 변환
@@ -67,7 +67,7 @@ class ClassScanner(BaseScanner):
         try:
             with urllib.request.urlopen(send_request) as response:
                 logging.debug('Send {0} MAC. Status: {1}'.format(
-                              hashed_mac, response.status))
+                              mac[:6], response.status))
         except Exception as err:
             logging.error('MAC address send error: {0}'.format(err))
         # 다음 저장 시간 세팅 및 변수 클리어
