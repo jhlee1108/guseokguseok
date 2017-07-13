@@ -1,6 +1,8 @@
 #!/bin/bash
 
+cd script/
 cp class_scanner.sh.template class_scanner.sh
+cp local_scanner.sh.template local_scanner.sh
 cp set_on_monitor_mode.sh.template set_on_monitor_mode.sh
 cp class_server.sh.template class_server.sh
 
