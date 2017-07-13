@@ -1,7 +1,7 @@
 [socket]
 # 시스템에서 사용할 인터페이스
 # wlx0013ef70600e, wlp4s0, wlan0
-interface = wlx0013ef70600e
+interface = wlan1 
 timeout = 5
 
 [log]
