@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# local variable
+CWD="/home/pi/guseokguseok"
+WLAN="wlan1"
+
+# check variable
+if [ -z ${CWD} ]
+then
+    echo "CWD is not setted!"
+    exit 0
+fi
+if [ -z ${WLAN} ]
+then
+    echo "WLAN is not setted!"
+    exit 0
+fi
+
+# change wlan interface to monitor mode
+ifconfig ${WLAN} down
+iwconfig ${WLAN} mode monitor
+ifconfig ${WLAN} up
+
+# start scan
+cd ${CWD}
+cd ./src/localscanner
+python3 local_scanner.py
+
