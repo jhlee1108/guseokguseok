@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WLAN="wlx0013ef70600e"
+WLAN="wlan1"
 
 if [ -z ${WLAN} ]
 then

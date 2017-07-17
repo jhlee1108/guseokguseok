@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CWD="/home/dnlab/Github/WorkLogger"
+CWD="/home/team9/guseokguseok"
 
 if [ -z ${CWD} ]
 then
@@ -9,7 +9,6 @@ then
 fi
 
 cd ${CWD}
-source ./bin/activate
 cd ./src/classserver
 python3 class_server.py
 
