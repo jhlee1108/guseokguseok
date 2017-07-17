@@ -27,6 +27,10 @@ class LocalScanner(BaseScanner):
             logging.critical('설정 파일 handle 세션에 '
                              + 'interval 항목이 필요합니다.')
             sys.exit(0)
+        if not 'location' in self.config['handle']:
+            logging.critical('설정 파일 handle 세션에 '
+                             + 'location 항목이 필요합니다.')
+            sys.exit(0)
         if not 'scan_db' in self.config['handle']:
             logging.critical('설정 파일 handle 세션에 '
                              + 'scan_db 항목이 필요합니다.')
@@ -35,6 +39,7 @@ class LocalScanner(BaseScanner):
         # self.last_handle = int(time.time())
         # self.mac_list = list()
         # self.interval = int(self.config['handle']['interval'])
+        self.location = self.config['handle']['location']
         # 저장할 데이터베이스 생성
         scan_db = self.config['handle']['scan_db']
         self.connector = sqlite3.connect(scan_db)
@@ -44,6 +49,7 @@ class LocalScanner(BaseScanner):
                 CREATE TABLE IF NOT EXISTS scan
                 ( log_number INTEGER PRIMARY KEY AUTOINCREMENT, 
                 date_time INTEGER,
+                location TEXT,
                 hashed_mac TEXT, 
                 mac_vendor TEXT, 
                 ssi_signal INTEGER );
@@ -67,8 +73,9 @@ class LocalScanner(BaseScanner):
         # for row in self.mac_list:
         self.cursor.execute('''
                 INSERT OR IGNORE INTO scan
-                (date_time, hashed_mac, mac_vendor, ssi_signal) VALUES ('''
+                (date_time, location, hashed_mac, mac_vendor, ssi_signal) VALUES ('''
                 + str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + ', ' 
+                + '"' + str(self.location) + '", '
                 + '"' + str(hashed_mac) + '", ' 
                 + '"' + str(mac[:6]) + '", ' 
                 + str(ssi_signal) + ')')

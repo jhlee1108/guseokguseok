@@ -17,4 +17,5 @@ file = ./scanner.log
 
 [handle]
 interval = 60
+location = pi
 scan_db = local_scan.sqlite
