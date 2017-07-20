@@ -24,5 +24,5 @@ ifconfig ${WLAN} up
 # start scan
 cd ${CWD}
 cd ./src/classscanner
-python3 class_scanner.py
+python3 class_scanner.py &
 
