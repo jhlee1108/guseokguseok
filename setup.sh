@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Copy configuration files
 cd script/
 cp class_scanner.sh.template class_scanner.sh
 cp local_scanner.sh.template local_scanner.sh
@@ -15,6 +16,7 @@ cp class_server.ini.template class_server.ini
 cd ../localscanner/
 cp local_scanner.ini.template local_scanner.ini
 
+# Install python 3.6
 cd ~/
 apt-get update
 wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz

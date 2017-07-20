@@ -78,9 +78,9 @@ class BaseScanner(object):
         if subtype != '4' or frame_type != '0': # Type: Management frame(0)
             return None, None                   # Subtype: 4
         source_mac_address = frame80211[3].hex()
-        print('SSI Signal: %d dBm' % ssi_signal)
-        print('Frame Control Field: ' + frame_control_field)
-        print('Source address: ' + source_mac_address)
+        # print('SSI Signal: %d dBm' % ssi_signal)
+        # print('Frame Control Field: ' + frame_control_field)
+        # print('Source address: ' + source_mac_address)
         # MAC 주소 반환
         return source_mac_address, ssi_signal
 
