@@ -5,7 +5,7 @@
 import cgi, cgitb
 cgitb.enable()
 import sqlite3 # 데이터베이스 접근
-import time # unix_time 시간 변환
+import datetime # date_time 시간 변환
 import sys # 종료
 import configparser # 설정파일 읽기
 
@@ -15,6 +15,7 @@ def _fail_response(user_id):
     """
     print("<html>")
     print("<head>")
+    print("  <meta charset='UTF-8'>")
     print("  <title>DNLab 출석부</title>")
     print("</head>")
     print("<body>")
@@ -31,6 +32,7 @@ def _success_response(user_id, log_set):
     """
     print("<html>")
     print("<head>")
+    print("  <meta charset='UTF-8'>")
     print("  <title>DNLab 출석부</title>")
     print("</head>")
     print("<body>")
@@ -40,10 +42,10 @@ def _success_response(user_id, log_set):
     print("    시간 장소<br>")
     for log in log_set:
         log_time = log[0]
-        device_id = log[1]
-        strtime = time.strftime('%Y.%m.%d %H:%M:%S',
-                                time.localtime(log_time))
-        print("    {0} {1}<br>".format(strtime, device_id))
+        location = log[1]
+        strtime = datetime.datetime.strptime(str(log_time), '%Y%m%d%H%M%S')\
+									.strftime('%Y.%m.%d %H:%M:%S')
+        print("    {0} {1}<br>".format(strtime, location))
     print("  </p>")
     print("  <a href='/index.html'> Return to mainpage </a>")
     print("</body>")
@@ -85,11 +87,11 @@ scan_db = config['handle']['scan_db']
 connector = sqlite3.connect(scan_db)
 cursor = connector.cursor()
 # 유저 기록 불러오기
-cursor.execute('SELECT unix_time, device_id FROM scan '
-              + 'WHERE log_set LIKE "%' + mac + '%" '
-              + 'ORDER BY unix_time ASC')
+cursor.execute('SELECT date_time, location FROM scan '
+              + 'WHERE hashed_mac = "' + mac + '" '
+              + 'ORDER BY date_time ASC')
 log_set = cursor.fetchall()
 # 유저 기록이 없을 경우
-if log_set == None:
-    log_set = [(int(time.time()), '기록없음')]
+if len(log_set) == 0:
+	log_set = [(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')), '기록없음')]
 _success_response(user_id, log_set)
