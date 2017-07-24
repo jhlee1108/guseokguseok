@@ -19,7 +19,7 @@ cp local_scanner.ini.template local_scanner.ini
 # Install python 3.6
 cd ~/
 apt-get update
-apt-get install vim
+apt-get install -y vim
 wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz
 tar xzvf Python-3.6.0.tgz
 cd Python-3.6.0/
