@@ -17,12 +17,11 @@ then
 fi
 
 # change wlan interface to monitor mode
-ifconfig ${WLAN} down
-iwconfig ${WLAN} mode monitor
-ifconfig ${WLAN} up
+sudo ifconfig ${WLAN} down
+sudo iwconfig ${WLAN} mode monitor
+sudo ifconfig ${WLAN} up
 
 # start scan
 cd ${CWD}
 cd ./src/localscanner
-python3 local_scanner.py &
-
+sudo python3 local_scanner.py &
