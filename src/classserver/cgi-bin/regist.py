@@ -14,6 +14,7 @@ def _fail_response(user_id, user_mac):
     """
     print("<html>")
     print("<head>")
+    print("  <meta charset='UTF-8'>")
     print("  <title>DNLab 출석부</title>")
     print("</head>")
     print("<body>")
@@ -31,6 +32,7 @@ def _success_response(user_id, user_mac):
     """
     print("<html>")
     print("<head>")
+    print("  <meta charset='UTF-8'>")
     print("  <title>DNLab 출석부</title>")
     print("</head>")
     print("<body>")
