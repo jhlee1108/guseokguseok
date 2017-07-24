@@ -41,7 +41,7 @@ class LocalScanner(BaseScanner):
         # self.interval = int(self.config['handle']['interval'])
         self.location = self.config['handle']['location']
         # 저장할 데이터베이스 생성
-        scan_db = self.config['handle']['scan_db']
+        scan_db = self.location + '.sqlite'
         self.connector = sqlite3.connect(scan_db)
         os.chmod(scan_db, 0o666)
         self.cursor = self.connector.cursor()
