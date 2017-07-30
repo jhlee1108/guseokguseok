@@ -2,5 +2,5 @@
 
 ### Setup
 ``` shell
-sudo ./setup.sh
+./setup.sh
 ```
