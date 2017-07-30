@@ -10,5 +10,4 @@ fi
 
 cd ${CWD}
 cd ./src/classserver
-python3 class_server.py &
-
+python3.5 class_server.py &
