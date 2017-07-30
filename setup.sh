@@ -18,8 +18,8 @@ cp local_scanner.ini.template local_scanner.ini
 
 # Install vim
 cd ~/
-apt-get update
-apt-get install -y vim
+sudo apt-get update
+sudo apt-get install -y vim
 
 # vim setting
 touch .vimrc
