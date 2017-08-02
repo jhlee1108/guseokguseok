@@ -42,10 +42,10 @@ def _success_response(user_id, log_set):
     print("    시간 장소<br>")
     for log in log_set:
         log_time = log[0]
-        location = log[1]
+        device_id = log[1]
         strtime = datetime.datetime.strptime(str(log_time), '%Y%m%d%H%M%S')\
 									.strftime('%Y.%m.%d %H:%M:%S')
-        print("    {0} {1}<br>".format(strtime, location))
+        print("    {0} {1}<br>".format(strtime, device_id))
     print("  </p>")
     print("  <a href='/index.html'> Return to mainpage </a>")
     print("</body>")
@@ -87,7 +87,7 @@ scan_db = config['handle']['scan_db']
 connector = sqlite3.connect(scan_db)
 cursor = connector.cursor()
 # 유저 기록 불러오기
-cursor.execute('SELECT date_time, location FROM scan '
+cursor.execute('SELECT date_time, device_id FROM scan '
               + 'WHERE hashed_mac = "' + mac + '" '
               + 'ORDER BY date_time ASC')
 log_set = cursor.fetchall()

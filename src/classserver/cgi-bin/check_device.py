@@ -23,7 +23,7 @@ def _fail_response():
     print("</html>")
 
 
-def _success_response(locations):
+def _success_response(devices):
     print("<html>")
     print("<head>")
     print("  <meta charset='UTF-8'>")
@@ -32,16 +32,16 @@ def _success_response(locations):
     print("<body>")
     print("  <h1>Success</h1>")
     print("  <p>")
-    print("    location datetime<br>")
-    for l in locations:
-        cursor.execute('SELECT MAX(date_time), location FROM scan '
-                     + 'WHERE location = "' + l[0] + '"')
+    print("    device_id datetime<br>")
+    for d in devices:
+        cursor.execute('SELECT MAX(date_time), device_id FROM scan '
+                     + 'WHERE device_id = "' + d[0] + '"')
         log = cursor.fetchone()
         log_time = log[0]
-        location = log[1]
+        device_id = log[1]
         strtime = datetime.datetime.strptime(str(log_time), '%Y%m%d%H%M%S')\
 									.strftime('%Y.%m.%d %H:%M:%S')
-        print("    {0} {1}<br>".format(location, strtime))
+        print("    {0} {1}<br>".format(device_id, strtime))
     print("  </p>")
     print("  <a href='/index.html'> Return to mainpage </a>")
     print("</body>")
@@ -58,11 +58,11 @@ scan_db = config['handle']['scan_db']
 connector = sqlite3.connect(scan_db)
 cursor = connector.cursor()
 
-cursor.execute('SELECT DISTINCT location FROM scan')
-locations = cursor.fetchall()
+cursor.execute('SELECT DISTINCT device_id FROM scan')
+devices = cursor.fetchall()
 
-if len(locations) == 0:
+if len(devices) == 0:
     _fail_response()
     sys.exit(0)
 
-_success_response(locations)
+_success_response(devices)
