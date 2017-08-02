@@ -8,6 +8,6 @@ then
     exit 0
 fi
 
-ifconfig ${WLAN} down
-iwconfig ${WLAN} mode monitor
-ifconfig ${WLAN} up
+sudo ifconfig ${WLAN} down
+sudo iwconfig ${WLAN} mode monitor
+sudo ifconfig ${WLAN} up

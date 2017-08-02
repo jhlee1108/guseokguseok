@@ -24,4 +24,4 @@ sudo ifconfig ${WLAN} up
 # start scan
 cd ${CWD}
 cd ./src/classscanner
-sudo python3.5 class_scanner.py &
+sudo python3.5 class_scanner.py

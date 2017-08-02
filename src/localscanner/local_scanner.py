@@ -27,9 +27,9 @@ class LocalScanner(BaseScanner):
             logging.critical('설정 파일 handle 세션에 '
                              + 'interval 항목이 필요합니다.')
             sys.exit(0)
-        if not 'location' in self.config['handle']:
+        if not 'device_id' in self.config['handle']:
             logging.critical('설정 파일 handle 세션에 '
-                             + 'location 항목이 필요합니다.')
+                             + 'device_id 항목이 필요합니다.')
             sys.exit(0)
         if not 'scan_db' in self.config['handle']:
             logging.critical('설정 파일 handle 세션에 '
@@ -39,9 +39,9 @@ class LocalScanner(BaseScanner):
         # self.last_handle = int(time.time())
         # self.mac_list = list()
         # self.interval = int(self.config['handle']['interval'])
-        self.location = self.config['handle']['location']
+        self.device_id = self.config['handle']['device_id']
         # 저장할 데이터베이스 생성
-        scan_db = self.location + '.sqlite'
+        scan_db = self.config['handle']['scan_db']
         self.connector = sqlite3.connect(scan_db)
         os.chmod(scan_db, 0o666)
         self.cursor = self.connector.cursor()
@@ -49,7 +49,7 @@ class LocalScanner(BaseScanner):
                 CREATE TABLE IF NOT EXISTS scan
                 ( log_number INTEGER PRIMARY KEY AUTOINCREMENT, 
                 date_time INTEGER,
-                location TEXT,
+                device_id TEXT,
                 hashed_mac TEXT, 
                 mac_vendor TEXT, 
                 ssi_signal INTEGER );
@@ -73,9 +73,9 @@ class LocalScanner(BaseScanner):
         # for row in self.mac_list:
         self.cursor.execute('''
                 INSERT OR IGNORE INTO scan
-                (date_time, location, hashed_mac, mac_vendor, ssi_signal) VALUES ('''
+                (date_time, device_id, hashed_mac, mac_vendor, ssi_signal) VALUES ('''
                 + str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')) + ', ' 
-                + '"' + str(self.location) + '", '
+                + '"' + str(self.device_id) + '", '
                 + '"' + str(hashed_mac) + '", ' 
                 + '"' + str(mac[:6]) + '", ' 
                 + str(ssi_signal) + ')')

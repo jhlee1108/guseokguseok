@@ -31,16 +31,16 @@ class ClassScanner(BaseScanner):
             logging.critical('설정 파일 handle 세션에 '
                              + 'server_url 항목이 필요합니다.')
             sys.exit(0)
-        if not 'location' in self.config['handle']:
+        if not 'device_id' in self.config['handle']:
             logging.critical('설정 파일 handle 세션에 '
-                             + 'location 항목이 필요합니다.')
+                             + 'device_id 항목이 필요합니다.')
             sys.exit(0)
         # 내부 변수 초기화
         # self.last_handle = int(time.time())
         # self.mac_list = list()
         # self.interval = int(self.config['handle']['interval'])
         self.server_url = self.config['handle']['server_url']
-        self.location = self.config['handle']['location']
+        self.device_id = self.config['handle']['device_id']
         
     # MAC 주소 다루기
     def _handle_mac(self, mac, ssi_signal):
@@ -56,7 +56,7 @@ class ClassScanner(BaseScanner):
         #if (now_handle - self.last_handle) < self.interval:
         #    return
         # 데이터 시리얼화
-        send_data = {'location': self.location,
+        send_data = {'device_id': self.device_id,
                      'hashed_mac': hashed_mac,
                      'mac_vendor': mac[:6],
                      'ssi_signal': ssi_signal}

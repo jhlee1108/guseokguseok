@@ -24,4 +24,4 @@ sudo ifconfig ${WLAN} up
 # start scan
 cd ${CWD}
 cd ./src/localscanner
-sudo python3.5 local_scanner.py &
+sudo python3.5 local_scanner.py
